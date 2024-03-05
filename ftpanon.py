@@ -1,36 +1,52 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
+
+#Este script testa se o servico FTP alvo possui a configuracao de login anonimo ativa, enviando as credenciais
+#ftp:ftp e anonymous:anonymous para isto
 
 import socket
 import sys
 
+#Explicacao de uso da ferramenta
+
+if len(sys.argv) != 3:
+        print "Exemplo de Uso: ./ftpanon.py [IP] [PORT]"
+        sys.exit()
+
+#Criacao de socket para fazer a conexao com o alvo
+
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.connect((str(sys.argv[1]), int(sys.argv[2])))
 
-print("Coletando Banner")
-banner = socket.recv(1024)
-print(banner)
+#Coleta de banner
 
-print("Enviando usuario: ftp")
-socket.send(b"USER ftp\r\n")
+banner = socket.recv(1024)
+print "\nBanner do Servico: "+banner
+
+#Envio de credenciais ftp:ftp
+
+print "Enviando Usuario --> ftp"
+socket.send("USER ftp\r\n")
 userresp = socket.recv(1024)
 
-print("Enviando senha: ftp")
-socket.send(b"PASS ftp\r\n")
-pwdresp = socket.recv(1024)
+print "Enviando Senha --> ftp"
+socket.send("PASS ftp\r\n")
+passresp = socket.recv(1024)
 
-x = b"logged in"
+#Verificacao de login com credenciais ftp:ftp
 
-if x in pwdresp:
-	print("\r\n------------------- LOGIN ANONIMO ATIVO -------------------")
+if "logged" in passresp:
+        print "\n[+] LOGIN ANONIMO ATIVO (ftp:ftp)"
 else:
-	print("\r\nEnviando usuario: anonymous")
-	socket.send(b"USER anonymous\r\n")
-	userresp2 = socket.recv(1024)
+#Envio de credenciais anonymous:anonymous
+        print "\nEnviando Usuario --> anonymous"
+        socket.send("USER anonymous\r\n")
+        userresp2 = socket.recv(1024)
 
-	print("Enviando senha: anonymous")
-	socket.send(b"PASS anonymous\r\n")
-	pwdresp2 = socket.recv(1024)
-	if x in pwdresp2:
-		print("\r\n------------------- LOGIN ANONIMO ATIVO -------------------")
-	else:
-		print("\r\nxxxxxxxxxxxxxxxx LOGIN ANONIMO DESATIVADO xxxxxxxxxxxxxxxx")
+        print "Enviando Senha --> anonymous"
+        socket.send("PASS anonymous\r\n")
+        pwdresp2 = socket.recv(1024)
+#Verificacao de login com credenciais anonymous:anonymous
+        if "logged" in pwdresp2:
+                print "\n[+] LOGIN ANONIMO ATIVO (anonymous:anonymous)"
+        else:
+                print "\n[-] LOGIN ANONIMO DESATIVADO"
