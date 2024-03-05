@@ -6,7 +6,7 @@
 import socket
 import sys
 
-#Explicacao de uso da ferramenta
+#Explicacao de uso da ferramenta quando executada sem argumentos válidos 
 
 if len(sys.argv) != 3:
         print "Exemplo de Uso: ./ftpanon.py [IP] [PORT]"
