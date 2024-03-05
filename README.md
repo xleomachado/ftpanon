@@ -7,4 +7,4 @@ Usage: ./ftpanon.py [IP] [PORT]
 
 Ferramenta em Python que verifica se o serviço FTP alvo possui a configuração de login anônimo ativo 
 
-Exemplo de uso: ./ftpanon.py [IP] [PORT
+Exemplo de uso: ./ftpanon.py [IP] [PORT]
